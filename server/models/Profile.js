@@ -18,3 +18,5 @@ const profileSchema = new mongoose.Schema({
     trim: true,
   },
 });
+
+export default mongoose.model("profile", userSchema);
