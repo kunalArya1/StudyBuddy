@@ -1,11 +1,11 @@
 import { ApiError } from "../utils/CustomeError/ApiError";
 import { ApiResponse } from "../utils/CustomeError/ApiResopnse";
 import { AsyncHandler } from "../utils/CustomeError/AsyncHandler";
-import User from "../models/User";
-import Otp from "../models/Otp";
+import User from "../models/User.model";
+import Otp from "../models/Otp.model";
 import otpGenerator from "otp-generator";
 import bcrypt from "bcrypt";
-import Profile from "../models/Profile";
+import Profile from "../models/Profile.model";
 import jwt from "jsonwebtoken";
 import mailSender from "../utils/MailSender";
 // sendOTP

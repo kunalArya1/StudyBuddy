@@ -1,4 +1,4 @@
-import User from "../models/User";
+import User from "../models/User.model";
 import mailSender from "../utils/MailSender";
 import { AsyncHandler } from "../utils/CustomeError/AsyncHandler";
 import { ApiResponse } from "../utils/CustomeError/ApiResopnse";

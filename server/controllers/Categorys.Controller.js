@@ -1,7 +1,7 @@
 import { AsyncHandler } from "../utils/CustomeError/AsyncHandler.js";
 import { ApiResponse } from "../utils/CustomeError/ApiResopnse.js";
 import { ApiError } from "../utils/CustomeError/ApiError.js";
-import Category from "../models/Category.js";
+import Category from "../models/Category.model.js";
 
 // Create Category
 export const createCategory = AsyncHandler(async (req, res) => {
