@@ -7,6 +7,7 @@ import otpGenerator from "otp-generator";
 import bcrypt from "bcrypt";
 import Profile from "../models/Profile";
 import jwt from "jsonwebtoken";
+import mailSender from "../utils/MailSender";
 // sendOTP
 
 export const sendOtp = AsyncHandler(async (req, res, next) => {
@@ -179,9 +180,35 @@ export const SignIn = AsyncHandler(async (req, res, next) => {
 
 export const changePassword = AsyncHandler(async (req, res, next) => {
   //get data from body
+  const { email, oldPassword, newPassword, confirmPassword } = req.body;
+
   //get old password ,new password confirmpasswpord
+  if (!email || !oldPassword || !newPassword || !confirmPassword) {
+    throw new ApiError(403, "All fields are required");
+  }
+
   //validation
+  if (newPassword !== confirmPassword) {
+    throw new ApiError(403, "Password and Confirm Password does not match");
+  }
+
+  // get user
+  const user = await User.findOne({ email: email });
+
   // update password in db
+  if (await bcrypt.compare(oldPassword, user.password)) {
+    user.password = await bcrypt.hash(newPassword, 10);
+    await user.save();
+  } else {
+    throw new ApiError(403, "Old Password is Incorrect");
+  }
+
   // send maill - password updated
+  await mailSender(
+    email,
+    "Your Password has Changed",
+    "Your Passowrd Changed.Please Check and Verify!"
+  );
   // return response
+  res.json(new ApiResponse(200, {}, "Password Updated Successfully"));
 });
