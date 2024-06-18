@@ -65,6 +65,7 @@ export const deleteSection = AsyncHandler(async (req, res) => {
   }
   //Delete the Data
   await Section.findByIdAndRemove(sectionId);
+  // TODO: whether we need to delete the section ObjectID from course or not
   //return response'
   return res.json(new ApiResponse(200, null, "Section Deleted Successfully"));
 });
