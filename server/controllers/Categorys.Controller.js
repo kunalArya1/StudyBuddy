@@ -33,3 +33,36 @@ export const getAllCategory = AsyncHandler(async (req, res) => {
     new ApiResponse(200, AllCategory, "All Categorys returened Successfully")
   );
 });
+
+// getCategory
+export const CategoryPageDetails = AsyncHandler(async (req, res) => {
+  // get category id
+  const { categoyId } = req.body;
+
+  // get course for specified category id
+  const selectedCourse = await Category.findById(categoyId)
+    .populate("course")
+    .exec();
+  // Validation
+  if (!selectedCourse) {
+    throw new ApiError("Category Not Found", 404);
+  }
+
+  // get course of diffn courses
+  const differentCategory = await Category.findById({
+    _id: { $ne: categoyId },
+  })
+    .populate("course")
+    .exec();
+
+  // TODO: get top selling courses
+
+  // rerturn response
+  return res.json(
+    new ApiResponse(
+      200,
+      { selectedCourse, differentCategory },
+      "Category Page Course Details Fetched Successfuly"
+    )
+  );
+});
