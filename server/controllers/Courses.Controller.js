@@ -7,7 +7,6 @@ import { uploadToCloudinary } from "../utils/ImageUploader.js";
 import Category from "../models/Category.model.js";
 
 // Create Course
-
 export const createCourse = AsyncHandler(async (req, res) => {
   // get Data
   const { courseName, courseDescription, whatYouWillLearn, price, category } =
@@ -107,5 +106,38 @@ export const getAllCourses = AsyncHandler(async (req, res) => {
 
   return res.json(
     new ApiResponse(200, courses, "All Course Details fetched successfully")
+  );
+});
+
+//get Course Details
+export const getCourseDetials = AsyncHandler(async (req, res) => {
+  // fetch data
+  const { courseId } = req.body;
+  // find course details
+  const courseDetails = await Course.find(courseId)
+    .populate({
+      path: "instructor",
+      populate: {
+        path: "additionalDetials",
+      },
+    })
+    .populate("Category")
+    .populate("ratingAndReview")
+    .populate({
+      path: "courses",
+      populate: {
+        path: subsection,
+      },
+    })
+    .exec();
+
+  if (!courseDetails) {
+    return res.json(
+      new ApiResponse(404, null, "Course Not Found with this Id")
+    );
+  }
+
+  res.json(
+    new ApiResponse(200, courseDetails, "Course Details fethced succesfully!")
   );
 });
